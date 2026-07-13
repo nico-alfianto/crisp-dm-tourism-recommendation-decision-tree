@@ -59,12 +59,18 @@ body { background: var(--bg); color: var(--text); }
 /* OTHER STYLES */
 .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 20px 0; }
 .kpi-card { background: linear-gradient(135deg, #065f46, #1f2937); padding: 25px; border-radius: 16px; text-align: center; }
+.kpi-card h3 { font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
 .kpi-card.value { font-size: 32px; font-weight: 800; color: var(--accent); }
 
 .results-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 20px; }
-.image-wrapper { width: 100%; height: 400px; background: #0f172a; border-radius: 12px; border: 1px solid #374151; }
-.image-wrapper img { width: 100%; height: 100%; object-fit: contain; }
-.placeholder { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--muted); text-align: center; padding: 20px; }
+.image-wrapper { width: 100%; background: #0f172a; border-radius: 12px; border: 1px solid #374151; padding: 10px; }
+.image-wrapper img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+.placeholder { display: flex; align-items: center; justify-content: center; height: 400px; color: var(--muted); text-align: center; padding: 20px; }
 
 .table { width:100%; border-collapse: collapse; margin-top:15px; font-size:13px; }
 .table th { background: var(--card2); padding:12px; text-align:left; color: var(--accent); }
@@ -165,13 +171,13 @@ body { background: var(--bg); color: var(--text); }
       <div>
         <h3>Confusion Matrix</h3>
         <div class="image-wrapper">
-          <img src="results/confusion_matrix.png" alt="Confusion Matrix" onerror="this.outerHTML='<div class=placeholder>Upload confusion_matrix.png to results folder</div>'">
+          <img src="results/confusion.png" alt="Confusion Matrix" />
         </div>
       </div>
       <div>
-        <h3>Decision Tree</h3>
+        <h3>Decision Tree Visualization</h3>
         <div class="image-wrapper">
-          <img src="results/decision_tree.png" alt="Decision Tree" onerror="this.outerHTML='<div class=placeholder>Upload decision_tree.png to results folder</div>'">
+          <img src="results/tree.png" alt="Decision Tree" />
         </div>
       </div>
     </div>

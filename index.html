@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRISP-DM Tourism Recommendation | Decision Tree | Nico Alfianto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0A0A0B;--card:#131315;--card2:#1A1A1D;--border:#232326;--text:#F4F4F5;--muted:#A1A1AA;--muted2:#71717A;--pill:#1E1E21}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{padding:48px 0 32px;border-bottom:1px solid var(--border)}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted2);font-weight:600;margin-bottom:16px}
+.eyebrow span{color:var(--text)}
+h1{font-size:42px;line-height:.95;letter-spacing:-.04em;font-weight:800}
+h1 em{font-style:normal;color:var(--muted)}
+.header-desc{max-width:560px;color:var(--muted);font-size:16px;margin-top:18px;line-height:1.7}
+.header-right{text-align:right}
+.header-right strong{display:block;font-size:15px}
+.header-right p{color:var(--muted);font-size:14px;margin-top:4px}
+.header-right .actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+.btn-white{display:inline-block;background:#fff;color:#000;font-size:14px;font-weight:600;padding:11px 18px;border-radius:999px}
+.btn-outline{display:inline-block;background:transparent;color:#fff;border:1px solid #3F3F46;font-size:14px;font-weight:600;padding:11px 18px;border-radius:999px}
+main{padding:32px 0 80px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;margin-bottom:20px}
+.card h3{font-size:18px;margin-bottom:6px}
+.card p.sub{font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.7}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{background:var(--card2);border:1px solid var(--border);border-radius:16px;padding:20px}
+.kpi span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);font-weight:600}
+.kpi b{display:block;font-size:28px;letter-spacing:-.03em;margin:8px 0 4px}
+.kpi small{font-size:13px;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.image-wrapper{width:100%;height:320px;background:#0A0A0B;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px;cursor:zoom-in}
+.image-wrapper img{width:100%;height:100%;object-fit:contain}
+.image-wrapper.tall{height:380px}
+.insight{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;font-size:14px;line-height:1.7;color:var(--muted)}
+.insight b{color:#fff}
+.table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+.table th{text-align:left;padding:12px;border-bottom:1px solid var(--border);color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.table td{padding:12px;border-bottom:1px solid var(--border);line-height:1.6;vertical-align:top}
+.pg-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px}
+.pg-step{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px}
+.pg-step span{font-size:12px;color:var(--muted2);font-weight:600;letter-spacing:.08em}
+.pg-step b{display:block;font-size:14px;margin:6px 0 4px}
+.pg-step p{font-size:13px;color:var(--muted);line-height:1.6}
+.pg-preset{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.pg-preset button{font-family:inherit;background:transparent;border:1px solid #3F3F46;color:var(--text);padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer}
+.pg-preset button.active{background:#fff;color:#000;border-color:#fff}
+.pg-grid2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px;align-items:start}
+.pg-seg{display:flex;gap:8px;flex-wrap:wrap}
+.pg-seg button{font-family:inherit;background:transparent;border:1px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer}
+.pg-seg button.on{background:#fff;color:#000;border-color:#fff}
+.pg-big{font-size:52px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.pg-badge{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;white-space:nowrap}
+.pg-badge.green{background:#052E16;color:#86EFAC;border:1px solid #166534}
+.pg-badge.yellow{background:#422006;color:#FDE68A;border:1px solid #92400E}
+.pg-badge.red{background:#450A0A;color:#FCA5A5;border:1px solid #7F1D1D}
+.pg-bar{height:14px;background:#27272A;border-radius:999px;overflow:hidden;margin:18px 0 8px}
+#pgFill{height:100%;width:41%;background:#F59E0B;transition:width .2s}
+.pg-contrib,.pg-action{background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-top:12px}
+.pg-meta{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;font-size:12px;color:var(--muted2);line-height:1.7}
+.pg-meta b{color:var(--text)}
+select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:#0A0A0B;color:var(--text);font-family:inherit;font-size:14px;margin-top:8px}
+label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);font-weight:600}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.92);justify-content:center;align-items:center;z-index:9999}
+.modal.active{display:flex}
+.modal img{max-width:92%;max-height:88%;border-radius:12px}
+.modal-close{position:absolute;top:20px;right:30px;font-size:40px;color:#fff;cursor:pointer}
+footer{border-top:1px solid var(--border);padding:28px 0 40px;color:var(--muted2);font-size:13px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+@media(max-width:900px){h1{font-size:34px}.kpi-grid{grid-template-columns:1fr 1fr}.grid2,.pg-grid2,.pg-steps{grid-template-columns:1fr}.header-right{text-align:left}.header-right .actions{justify-content:flex-start}.pg-big{font-size:42px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="top"><div>
+<div class="eyebrow">Data Analytics <span>— CRISP-DM & Decision Tree</span></div>
+<h1>Tourism Destination<br><em>Recommendation System</em></h1>
+<p class="header-desc">Applying CRISP-DM methodology to build a tourism recommendation system using Decision Tree Classifier. Trained on Indonesia tourism dataset from Kaggle, classifying destination ratings into Low, Medium, High.</p>
+<p style="font-size:13px;color:var(--muted2);margin-top:12px;">Fundamentals of Data Analyst — Semester 3, Universitas Bina Sarana Informatika (2025)</p>
+</div><div class="header-right"><strong>Nico Alfianto</strong><p>Bogor, Indonesia — 19240013</p><div class="actions"><a class="btn-white" href="https://nico-myproject.github.io">Back to Portfolio</a><a class="btn-outline" href="#recommendation">Try Recommendation</a></div></div></div></div></header>
+<main class="wrap">
+<div class="kpi-grid" style="margin-bottom:20px;">
+<div class="kpi"><span>Model Accuracy</span><b>41%</b><small>Baseline, not production</small></div>
+<div class="kpi"><span>Best Recall</span><b style="color:#86EFAC;">80% — Medium</b><small>Model favors majority class</small></div>
+<div class="kpi"><span>Train / Test Split</span><b>80% / 20%</b><small>scikit-learn</small></div>
+<div class="kpi"><span>Classes</span><b>3 Classes</b><small>Low, Medium, High</small></div>
+</div>
+<div class="card"><h3>Project Overview</h3><p style="font-size:14px;color:var(--muted);line-height:1.8;">Indonesia's tourism industry generates massive amounts of data, making it difficult for travelers to choose destinations efficiently. This project applies the CRISP-DM framework together with a Decision Tree Classifier to classify and recommend tourism destinations based on user ratings from a public Kaggle dataset. The goal is not to claim high accuracy, but to demonstrate a complete CRISP-DM workflow — from business understanding to evaluation — and to honestly analyze why a simple Decision Tree struggles on this dataset.</p></div>
+<!-- PLAYGROUND -->
+<div class="card" id="recommendation">
+<div class="eyebrow" style="margin-bottom:10px;">Interactive Playground <span>— Decision Tree Simulator</span></div>
+<h2 style="font-size:28px;">Try the Recommendation System</h2>
+<p class="sub" style="max-width:720px;">This simulator shows how a Decision Tree decides — step by step. Pick your preferences, then see the tree path, predicted rating, and what it means. This is a demo of the trained model logic, not a production recommender.</p>
+<div class="pg-steps">
+<div class="pg-step"><span>STEP 01</span><b>Choose preferences</b><p>Pick category, budget, and duration — the same features used for modeling.</p></div>
+<div class="pg-step"><span>STEP 02</span><b>Follow the tree path</b><p>See each split: Category → Budget → Duration → Prediction.</p></div>
+<div class="pg-step"><span>STEP 03</span><b>Read the honest result</b><p>Medium predictions are most reliable (80% recall). Low / High are weaker — see why below.</p></div>
+</div>
+<div class="pg-preset" id="pgPreset">
+<button onclick="setPresetPG(0,this)" class="active">Nature + Medium Budget</button>
+<button onclick="setPresetPG(1,this)">Culture + Low Budget</button>
+<button onclick="setPresetPG(2,this)">Adventure + High Budget</button>
+<button onclick="setPresetPG(3,this)">Culinary + Medium Budget</button>
+</div>
+<div class="pg-grid2">
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-weight:600;">Your Preferences</div>
+<div style="display:grid;gap:16px;margin-top:14px;">
+<div><label>Destination Category</label><select id="pgCat" onchange="runPG()"><option value="nature">Nature & Beach</option><option value="culture">Cultural & Historical</option><option value="adventure">Adventure & Sport</option><option value="culinary">Culinary</option></select></div>
+<div><label>Budget Range</label><select id="pgBudget" onchange="runPG()"><option value="low">Low — Under $50</option><option value="medium" selected>Medium — $50 - $200</option><option value="high">High — Above $200</option></select></div>
+<div><label>Travel Duration</label><select id="pgDur" onchange="runPG()"><option value="short">1–3 Days</option><option value="medium" selected>4–7 Days</option><option value="long">More than 7 Days</option></select></div>
+<div><label>Group Size</label><select id="pgGroup" onchange="runPG()"><option value="solo">Solo Travel</option><option value="couple">Couple</option><option value="family" selected>Family</option><option value="group">Large Group</option></select></div>
+</div>
+<div class="pg-action"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;">Decision Tree Path</div><div id="pgPath" style="font-size:14px;line-height:2;color:var(--muted);margin-top:6px;">Category = Nature<br>→ Budget = Medium<br>→ Duration = Medium (4–7 Days)<br>→ Predict: <b style="color:#fff;">Medium</b></div></div>
+</div>
+<div>
+<div style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-weight:600;">Model Prediction</div>
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:10px;gap:12px;">
+<div><div class="pg-big" id="pgTitle">Medium</div><div style="font-size:14px;color:var(--muted);margin-top:6px;" id="pgSubtitle">Predicted Rating Class</div></div>
+<span class="pg-badge green" id="pgBadge">MOST RELIABLE</span>
+</div>
+<div style="margin-top:10px;"><span style="font-size:12px;color:var(--muted2);letter-spacing:.08em;font-weight:600;">MODEL CONFIDENCE — INDICATIVE</span><div class="pg-bar"><div id="pgFill"></div></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted2);"><span id="pgConf">Confidence: 62%</span><span>Overall Accuracy: 41%</span></div></div>
+<div class="pg-contrib"><div style="font-size:13px;font-weight:700;margin-bottom:6px;">Recommended Destinations</div><div id="pgRec" style="font-size:14px;line-height:1.8;color:var(--muted);"></div></div>
+<div class="pg-contrib"><div style="font-size:13px;font-weight:700;margin-bottom:6px;">Why This Prediction?</div><div id="pgWhy" style="font-size:14px;line-height:1.7;color:var(--muted);"></div></div>
+<button onclick="runPG()" class="btn-white" style="margin-top:14px;border:none;cursor:pointer;font-family:inherit;">Run Again</button>
+</div>
+</div>
+<div class="pg-meta"><div><b>Model:</b> Decision Tree Classifier (scikit-learn)</div><div><b>Split:</b> 80% Train / 20% Test</div><div><b>Accuracy:</b> 41% — Baseline</div><div><b>Note:</b> Demo uses simplified tree logic from the trained model. Full model in notebooks/tourism_recommendation.ipynb</div></div>
+</div>
+
+<!-- HONEST EVALUATION -->
+<div class="card"><h3>Honest Evaluation — Why 41%?</h3><p class="sub">41% is not hidden. Here is what it actually means.</p><div class="grid2">
+<div><p style="font-size:14px;color:var(--muted);line-height:1.8;"><b style="color:#fff;">Best Recall: Medium class — 80%</b><br>The model is good at recognizing Medium-rated destinations because Medium is the majority class in the dataset.<br><br><b style="color:#fff;">Weak on Low & High</b><br>Minority classes are underrepresented, so the tree tends to predict Medium by default.<br><br><b style="color:#fff;">What this proves</b><br>A single Decision Tree is a good baseline, but not enough for a real recommender.</p></div>
+<div><p style="font-size:14px;color:var(--muted);line-height:1.8;"><b style="color:#fff;">Suggested Improvements</b><br>Feature Engineering<br>Random Forest (ensemble, reduces overfitting)<br>Collaborative Filtering (user-based)<br>Hybrid Recommendation Systems<br>Class balancing / more data for Low & High</p><div class="insight" style="margin-top:12px;"><b>Takeaway for recruiter:</b> This project shows I can build a full CRISP-DM pipeline AND critically evaluate a model — not just chase a high accuracy number.</div></div>
+</div></div>
+
+<!-- CRISP-DM -->
+<div class="card"><h3>Methodology — CRISP-DM Framework</h3><p class="sub">6 phases, end to end.</p><div class="grid2">
+<div><p style="font-size:14px;color:var(--muted);line-height:2;"><b style="color:#fff;">1. Business Understanding</b> — Information overload in tourism destination selection.<br><b style="color:#fff;">2. Data Understanding</b> — 3 tourism datasets from Kaggle, analyzed for structure & quality.<br><b style="color:#fff;">3. Data Preparation</b> — Merge datasets, handle missing values, encode categorical features.</p></div>
+<div><p style="font-size:14px;color:var(--muted);line-height:2;"><b style="color:#fff;">4. Modeling</b> — Decision Tree Classifier using scikit-learn.<br><b style="color:#fff;">5. Evaluation</b> — Confusion Matrix + Classification Report.<br><b style="color:#fff;">6. Deployment</b> — Classify destination ratings into Low, Medium, High.</p></div>
+</div></div>
+
+<!-- RESULTS -->
+<div class="card"><h3>Model Results</h3><p class="sub">Click to zoom.</p><div class="grid2">
+<div><h3 style="margin-bottom:10px;">Confusion Matrix</h3><div class="image-wrapper tall" onclick="openModal('results/confusion_matrix.png')"><img src="results/confusion_matrix.png" alt="Confusion Matrix" loading="lazy"></div><div class="insight"><b>What it shows:</b> Where the model confuses classes. Medium is predicted correctly most often, Low / High are often misclassified as Medium.</div></div>
+<div><h3 style="margin-bottom:10px;">Decision Tree Visualization</h3><div class="image-wrapper tall" onclick="openModal('results/decision_tree.png')"><img src="results/decision_tree.png" alt="Decision Tree" loading="lazy"></div><div class="insight"><b>What it shows:</b> How the tree splits on features. This is why Decision Tree is interpretable — you can follow every decision.</div></div>
+</div></div>
+
+<!-- TECH + TEAM -->
+<div class="grid2">
+<div class="card"><h3>Tech Stack</h3><p class="sub">Tools used.</p><table class="table"><tr><th>Category</th><th>Technology</th></tr><tr><td>Language</td><td>Python 3.11.9</td></tr><tr><td>IDE</td><td>Google Colab, VS Code, Jupyter Notebook</td></tr><tr><td>Libraries</td><td>Pandas, NumPy, Matplotlib, Seaborn, Scikit-learn</td></tr><tr><td>Dataset</td><td>Indonesia Tourism Destination (Kaggle)</td></tr></table><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;"><a class="btn-white" href="https://colab.research.google.com/drive/11Cbd_DNi3lxTwl0hhYEnt9hWigPtG5Xw">Open in Colab</a><a class="btn-outline" href="https://www.kaggle.com/datasets/aprabowo/indonesia-tourism-destination">Kaggle Dataset</a></div></div>
+<div class="card"><h3>Project Team</h3><p class="sub">Fundamentals of Data Analyst — Semester 3.</p><table class="table"><tr><th>Name</th><th>Student ID</th></tr><tr><td>Nico Alfianto</td><td>19240013</td></tr><tr><td>Muhammad Ikhsan Basuki</td><td>19240452</td></tr><tr><td>Marcho Dominggus Deviano Timisela</td><td>19240228</td></tr><tr><td>Awaludin Al Ayubi</td><td>19240187</td></tr><tr><td>Nethar Balawan Mualikul Mulki</td><td>19240450</td></tr></table></div>
+</div>
+
+<!-- PUBLICATION + REPO -->
+<div class="grid2">
+<div class="card"><h3>Publication & Documentation</h3><p class="sub">Academic paper & journal.</p><p style="font-size:14px;color:var(--muted);line-height:1.8;">This project is documented as a scientific journal using the SINTA journal template from the Ministry of Higher Education, Science, and Technology of Indonesia.</p><p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:12px;"><i>Alfianto, N., Basuki, M. I., Timisela, M. D., Alayubi, A., & Mulki, N. B. M. (2025). Application of CRISP-DM Methodology in Tourism Destination Recommendation System Using Decision Tree Algorithm. Universitas Bina Sarana Informatika.</i></p><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;"><a class="btn-white" href="paper/Makalah_CRISP-DM_Tourism.pdf">Read Paper PDF</a><a class="btn-outline" href="https://drive.google.com/file/d/1T-qXPhuI0s2l4osOBJX91YiUxhfC584K/view">Journal</a></div></div>
+<div class="card"><h3>Repository Structure</h3><p class="sub">How to run.</p><pre>crisp-dm-tourism-recommendation-decision-tree/
+├── data/          # *.csv
+├── notebooks/
+│   └── tourism_recommendation.ipynb
+├── results/
+│   ├── confusion_matrix.png
+│   └── decision_tree.png
+├── paper/
+│   ├── Makalah_CRISP-DM_Tourism.pdf
+│   └── Journal.pdf
+└── requirements.txt</pre><p style="font-size:13px;color:var(--muted);margin-top:12px;">pip install -r requirements.txt → Open notebook in Colab / Jupyter</p></div>
+</div>
+
+</main>
+<footer><div class="wrap"><span>© 2026 Nico Alfianto — CRISP-DM Tourism Recommendation. Fundamentals of Data Analyst 2025</span><span><a href="https://nico-myproject.github.io">Portfolio</a></span></div></footer>
+<div class="modal" id="imageModal" onclick="closeModal()"><span class="modal-close">&times;</span><img id="modalImg" src="" alt="Full View"></div>
+<script>
+function openModal(src){document.getElementById('modalImg').src=src;document.getElementById('imageModal').classList.add('active');}
+function closeModal(){document.getElementById('imageModal').classList.remove('active');}
+var DEST={nature:[['Bali — Nusa Penida','Beautiful beaches and cliffs, good for medium budget'],['Lombok — Gili Islands','Crystal clear water and snorkeling'],['Yogyakarta — Pantai Parangtritis','Affordable beach destination']],culture:[['Yogyakarta — Borobudur Temple','UNESCO World Heritage Site'],['Jakarta — Kota Tua','Historical colonial buildings'],['Solo — Keraton Surakarta','Javanese cultural center']],adventure:[['Bromo Tengger Semeru','Volcano hiking and sunrise view'],['Raja Ampat','World-class diving spot'],['Bandung — Kawah Putih','Unique crater lake']],culinary:[['Bandung — Culinary Tour','Famous for street food and cafes'],['Yogyakarta — Malioboro','Traditional Javanese cuisine'],['Medan — Culinary Center','Authentic Indonesian food']]};
+function runPG(){
+var cat=document.getElementById('pgCat').value, bud=document.getElementById('pgBudget').value, dur=document.getElementById('pgDur').value, grp=document.getElementById('pgGroup').value;
+var pred='Medium', conf=62, badge='MOST RELIABLE', cls='green', why='';
+if(bud==='high' && (cat==='adventure'||cat==='culture')){pred='High';conf=48;badge='LESS RELIABLE — MINORITY CLASS';cls='yellow';why='High-budget + Adventure / Culture often maps to High rating, but High is a minority class. The model often confuses it with Medium — check Confusion Matrix below.';}
+else if(bud==='low' && dur==='short'){pred='Low';conf=38;badge='WEAK — MINORITY CLASS';cls='red';why='Low budget + short trip often maps to Low rating, but Low is underrepresented. The tree tends to predict Medium instead — this is the class imbalance problem.';}
+else {pred='Medium';conf=62;badge='MOST RELIABLE';cls='green';why='Medium is the majority class (Recall 80%). The tree has seen the most examples here, so Medium predictions are the most trustworthy.';}
+document.getElementById('pgTitle').textContent=pred;
+document.getElementById('pgPath').innerHTML='Category = '+cat.charAt(0).toUpperCase()+cat.slice(1)+'<br>→ Budget = '+bud.charAt(0).toUpperCase()+bud.slice(1)+'<br>→ Duration = '+dur+' ('+(dur==='short'?'1–3 Days':dur==='medium'?'4–7 Days':'More than 7 Days')+')<br>→ Predict: <b style="color:#fff;">'+pred+'</b>';
+document.getElementById('pgBadge').textContent=badge;document.getElementById('pgBadge').className='pg-badge '+cls;
+document.getElementById('pgFill').style.width=conf+'%';document.getElementById('pgFill').style.background=pred==='Medium'?'#22C55E':pred==='High'?'#F59E0B':'#EF4444';
+document.getElementById('pgConf').textContent='Confidence: '+conf+'% — Indicative, not from production model';
+document.getElementById('pgWhy').textContent=why;
+document.getElementById('pgRec').innerHTML=DEST[cat].map(function(d){return '<b style="color:#fff;">'+d[0]+'</b><br><span style="font-size:13px;">'+d[1]+'</span>';}).join('<br><br>');
+}
+function setPresetPG(i,btn){var b=document.querySelectorAll('#pgPreset button');for(var j=0;j<b.length;j++)b[j].classList.remove('active');if(btn)btn.classList.add('active');var p=[['nature','medium','medium','family'],['culture','low','short','solo'],['adventure','high','long','group'],['culinary','medium','medium','couple']][i];document.getElementById('pgCat').value=p[0];document.getElementById('pgBudget').value=p[1];document.getElementById('pgDur').value=p[2];document.getElementById('pgGroup').value=p[3];runPG();}
+runPG();
+</script>
+</body>
+</html>
